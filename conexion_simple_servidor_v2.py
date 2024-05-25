@@ -27,7 +27,7 @@ s.listen()
 # Iniciamos un bucle infinito (while) que permitirá al servidor aceptar 
 # múltiples conexiones.
 while True:
-
+    
     # Cuando un cliente se conecta c crea un nuevo objeto
     # socket para la conexión con el cliente.
     # addr es la dirección IP y el puerto del cliente
@@ -41,19 +41,27 @@ while True:
     print('Conexión recibida de', addr)
 
     # Envíamos un mensaje de agradecimiento al cliente. 
-    # La b antes de la cadena indica que se envía 
-    # como datos binarios.
-    mensaje = "Gracias por conectar. \nEsto es un texto de prueba. \nA ver que pasa."
-    mensaje_bytes = mensaje.encode('utf8')
-    c.send(mensaje_bytes)
-   
-    
-    #### TAMBIEN SE PUEDE HACER ASI EL ENVIO DE MENSAJE EN BYTES ###
-    # Envíamos un mensaje de agradecimiento al cliente. 
-    # La b antes de la cadena indica que se envía 
-    # como datos binarios.
-    #c.send(b'Gracias por conectar.')
-    #c.send(b'Mandame un mensaje.')
+    # Para ello tenemos que codificar el envío en una secuencia de bytes
 
-    # Cerramos la conexión con el cliente.
+    # Define una cadena de texto mensaje que contiene varios mensajes separados por saltos de línea (\n).
+    mensaje = "Gracias por conectar. \nEsto es un texto de prueba. \nA ver que pasa."
+    # Convertimos la cadena mensaje en una secuencia de bytes utilizando la codificación UTF-8.
+    mensaje_bytes = mensaje.encode('utf8')
+    # Enviamos los bytes codificados a través del socket c.
+    c.send(mensaje_bytes)
+
+    # Esta línea recibe hasta 1024 bytes de datos desde el socket c, los imprime en la consola
+    # y decodifica los bytes a una cadena antes de imprimirlos.
+    print("Informacion recibida: ", c.recv(1024).decode('utf-8'))
+    # Definimos una cadena de texto info con el mensaje "El gusto es mío.".
+    info = "El gusto es mío."
+    # Convertimos la cadena info en una secuencia de bytes utilizando la codificación UTF-8.
+    bytes_info = info.encode('utf-8')
+
+    # Imprime en la consola la información que será enviada.
+    print("Informacion enviada: ", info)
+    # Enviamos los bytes codificados a través del socket c.
+    c.send(bytes_info)
+
+    #Cierra la conexión del socket c.
     c.close()
